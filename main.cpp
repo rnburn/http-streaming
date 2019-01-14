@@ -94,6 +94,10 @@ static void OnSocketReady(int socket, short /*what*/, void* context_void) {
   auto num_written =
       ::write(socket, static_cast<const void*>(context.stream.data()),
               context.stream.size());
+  if (num_written <= 0) {
+    std::cerr << "unexpected write return value: " << num_written << "\n";
+    std::terminate();
+  }
   std::cout << "write " << num_written << "/" << context.stream.size()
             << std::endl;
   context.stream.erase(0, num_written);
